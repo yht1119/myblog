@@ -11,11 +11,8 @@
         <hr>
         <p>微信：{{ user.wx }}</p>
         <p>QQ：{{ user.qq }}</p>
-        <p>微信：{{ user.wx }}</p>
         <p>联系电话：{{ user.telephone }}</p>
         <p>住址：{{ user.address }}</p>
     </div>
-
-
-
+    <a href="{% url 'edit_user' user.id %}" class="btn btn-primary">修改</a>
 {% endblock %}

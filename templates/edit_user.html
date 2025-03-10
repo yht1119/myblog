@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}编辑信息{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">编辑信息</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="name" class="form-label">昵称：</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}">
+            </div>
+            <div class="mb-3">
+                <label for="introduce" class="form-label">简介：</label>
+                <textarea id="introduce" name="introduce" class="form-control">{{ user.introduce }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="company" class="form-label">公司：</label>
+                <input type="text" id="company" name="company" class="form-control" value="{{ user.company }}">
+            </div>
+            <div class="mb-3">
+                <label for="profession" class="form-label">职位：</label>
+                <input type="text" id="profession" name="profession" class="form-control" value="{{ user.profession }}">
+            </div>
+            <div class="mb-3">
+                <label for="wx" class="form-label">微信：</label>
+                <input type="text" id="wx" name="wx" class="form-control" value="{{ user.wx }}">
+            </div>
+            <div class="mb-3">
+                <label for="qq" class="form-label">QQ：</label>
+                <input type="text" id="qq" name="qq" class="form-control" value="{{ user.qq }}">
+            </div>
+            <div class="mb-3">
+                <label for="telephone" class="form-label">联系电话：</label>
+                <input type="text" id="telephone" name="telephone" class="form-control" value="{{ user.telephone }}">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">住址：</label>
+                <input type="text" id="address" name="address" class="form-control" value="{{ user.address }}">
+            </div>
+            <div class="mb-3">
+                <label for="avatar" class="form-label">头像：</label>
+                <input type="file" id="avatar" name="avatar" class="form-control">
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

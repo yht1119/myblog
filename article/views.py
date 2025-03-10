@@ -13,7 +13,7 @@ from user.models import MyUser
 
 def article(request, id, page, typeId):
     """
-    根据用户id和页码查询帖子
+    根据页码查询帖子
     :param request:
     :param id:
     :param page:
@@ -22,12 +22,13 @@ def article(request, id, page, typeId):
     """
     pageSize = 10  # 每页大小
     user = MyUser.objects.filter(id=id).first()
+    admin_user_id = 2  # 管理员用户的ID为2
     if not user:
         return redirect(reverse('toRegisterPage'))
     if typeId == None or typeId == 0:
-        articleList = Article.objects.filter(author_id=id).order_by('-create_time')
+        articleList = Article.objects.filter(author_id=admin_user_id).order_by('-create_time')
     else:
-        articleList = Article.objects.filter(author_id=id, type_id=typeId).order_by('-create_time')
+        articleList = Article.objects.filter(author_id=admin_user_id, type_id=typeId).order_by('-create_time')
     paginator = Paginator(articleList, pageSize)
     try:
         pageData = paginator.page(page)  # 获取一页数据
