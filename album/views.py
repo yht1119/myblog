@@ -7,14 +7,15 @@ from album.models import AlbumInfo
 # Create your views here.
 def album(request, id, page):
     """
-    根据用户id和页码查询图片墙信息
+    根据页码查询图片墙信息
     :param request:
     :param id:
     :param page:
     :return:
     """
     pageSize = 6  # 每页大小
-    albumList = AlbumInfo.objects.filter(user_id=id).order_by('id')
+    admin_user_id = 2  # 管理员用户的ID为2
+    albumList = AlbumInfo.objects.filter(user_id=admin_user_id).order_by('id')
     paginator = Paginator(albumList, pageSize)
     try:
         pageData = paginator.page(page)  # 获取一页数据

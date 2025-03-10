@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import MyUser
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.urls import reverse
-
+from django.shortcuts import get_object_or_404
 
 def register(request):
     username = request.POST.get('username', '')
@@ -68,3 +68,28 @@ def about(request, id):
     """
     user = MyUser.objects.filter(id=id).first()
     return render(request, 'about.html', locals())
+
+def edit_user(request, id):
+    """
+    修改个人信息
+    """
+    user = get_object_or_404(MyUser, id=id)
+    if request.method == 'POST':
+        # 获取表单数据并更新用户信息
+        user.name = request.POST.get('name')
+        user.introduce = request.POST.get('introduce')
+        user.company = request.POST.get('company')
+        user.profession = request.POST.get('profession')
+        user.wx = request.POST.get('wx')
+        user.qq = request.POST.get('qq')
+        user.telephone = request.POST.get('telephone')
+        user.address = request.POST.get('address')
+        
+        # 处理头像上传
+        if 'avatar' in request.FILES:
+            avatar = request.FILES['avatar']
+            user.avatar.save(avatar.name, avatar, save=True)
+        
+        user.save()
+        return redirect('about', id=user.id)
+    return render(request, 'edit_user.html', locals())

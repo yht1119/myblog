@@ -13,5 +13,6 @@ urlpatterns = [
     # 用户注册请求
     path('register', register, name='userregister'),
     # 关于博主
-    path('about/<int:id>.html', about, name='about'),
+    path('about/<int:id>/.html', about, name='about'),
+    path('edit_user/<int:id>/.html', edit_user, name='edit_user'),
 ]
