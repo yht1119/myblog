@@ -27,8 +27,7 @@ def register(request):
         user.save()
         info = '注册成功，请重新登录'
         logout(request)
-    
-    return render(request, 'register.html', {'info': info})
+    return render(request, 'register.html', locals())
 
 
 def login(request):
@@ -40,17 +39,14 @@ def login(request):
         user = authenticate(username=username, password=password)
         if user:
             if user.is_active:
-                auth_login(request, user)
-                kwargs = {'id': request.user.id, 'page': 1, 'typeId': 0}
-                return redirect(reverse('article', kwargs=kwargs))
-            else:
-                errorinfo = '用户未激活！'
+                django.contrib.auth.login(request, user)
+            kwargs = {'id': request.user.id, 'page': 1, 'typeId': 0}
+            return redirect(reverse('article', kwargs=kwargs))
         else:
             errorinfo = '用户名或者密码错误！'
     else:
         errorinfo = '用户不存在，请注册'
-    
-    return render(request, 'login.html', {'errorinfo': errorinfo})
+    return render(request, 'login.html', locals())
 
 
 def toLoginPage(request):
@@ -64,6 +60,11 @@ def toRegisterPage(request):
 
 
 def about(request, id):
-    """根据用户id查询个人信息"""
+    """
+    根据用户id查询个人信息
+    :param request:
+    :param id:
+    :return:
+    """
     user = MyUser.objects.filter(id=id).first()
     return render(request, 'about.html', locals())
