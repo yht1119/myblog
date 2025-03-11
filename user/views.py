@@ -4,6 +4,8 @@ from .models import MyUser
 from django.contrib.auth import login as auth_login, logout, authenticate
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
+from django.urls import reverse_lazy
 
 def register(request):
     username = request.POST.get('username', '')
@@ -93,3 +95,20 @@ def edit_user(request, id):
         user.save()
         return redirect('about', id=user.id)
     return render(request, 'edit_user.html', locals())
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'change_password.html'  # 自定义模板
+    success_url = reverse_lazy('password_change_done')  # 修改成功后的重定向 URL
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user  # 将当前用户信息传递给模板
+        return context
+
+class CustomPasswordChangeDoneView(PasswordChangeDoneView):
+    template_name = 'password_change_done.html'  # 自定义成功提示模板
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user  # 将当前用户信息传递给模板
+        return context

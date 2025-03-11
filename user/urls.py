@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from django.contrib.auth.views import PasswordChangeView
 
 # 路由
 urlpatterns = [
@@ -15,4 +16,6 @@ urlpatterns = [
     # 关于博主
     path('about/<int:id>/.html', about, name='about'),
     path('edit_user/<int:id>/.html', edit_user, name='edit_user'),
+    path('change_password/', PasswordChangeView.as_view(), name='change_password'),
+    path('password_change_done/', CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
 ]

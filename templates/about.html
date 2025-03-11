@@ -14,5 +14,8 @@
         <p>联系电话：{{ user.telephone }}</p>
         <p>住址：{{ user.address }}</p>
     </div>
-    <a href="{% url 'edit_user' user.id %}" class="btn btn-primary">修改个人信息</a>
+    <div class="d-flex">
+        <a href="{% url 'edit_user' user.id %}" class="btn btn-primary me-2">修改个人信息</a>
+        <a href="{% url 'change_password' %}" class="btn btn-secondary">修改密码</a>
+    </div>
 {% endblock %}
