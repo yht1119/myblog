@@ -4,9 +4,9 @@ from article.models import *
 # Register your models here.
 
 
-admin.site.site_title = "python222博客后台管理"
+admin.site.site_title = "个性化博客后台管理"
 admin.site.index_title = "博客后台管理"
-admin.site.site_header = "python222博客管理系统"
+admin.site.site_header = "个性化博客管理系统"
 
 
 @admin.register(Article)
@@ -31,12 +31,21 @@ class ArticleAdmin(admin.ModelAdmin):
         :return:
         """
         if db_field.name == 'author':
-            id = request.user.id
-            kwargs["queryset"] = MyUser.objects.filter(id=id)
+            # 只允许当前用户作为作者
+            kwargs["queryset"] = MyUser.objects.filter(id=request.user.id)
         if db_field.name == 'type':
-            id = request.user.id
-            kwargs["queryset"] = ArticleType.objects.filter(user_id=id)
+            kwargs["queryset"] = ArticleType.objects.all()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_readonly_fields(self, request, obj=None):
+        # 将 author 字段设置为只读
+        return ['author']
+
+    def save_model(self, request, obj, form, change):
+        # 在保存模型时，自动设置作者为当前用户
+        if not change:  # 只有在添加新文章时
+            obj.author = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(ArticleType)
@@ -50,11 +59,8 @@ class ArticleTypeAdmin(admin.ModelAdmin):
         :return:
         """
         qs = super().get_queryset(request)
-        return qs.filter(user_id=request.user.id)
+        return qs.all()
 
-    def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ["user"]
-        return self.readonly_fields
 
 
 @admin.register(Comment)
@@ -68,8 +74,20 @@ class CommentAdmin(admin.ModelAdmin):
         :return:
         """
         qs = super().get_queryset(request)
-        return qs.filter(author_id=request.user.id)
+        return qs.all()
 
     def get_readonly_fields(self, request, obj=None):
-        self.readonly_fields = ["author"]
-        return self.readonly_fields
+        # 将所有字段设置为只读
+        return ['article', 'user', 'content', 'create_time', 'id']  # 添加所有需要只读的字段
+
+    def has_change_permission(self, request, obj=None):
+        # 禁止修改评论
+        return False
+
+    def has_add_permission(self, request):
+        # 禁止添加新评论
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # 允许删除评论
+        return True

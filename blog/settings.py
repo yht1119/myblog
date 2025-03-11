@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,9 +41,10 @@ INSTALLED_APPS = [
     'album',
     'article',
     'message',
-    'link',
+    # 'link',
     'ckeditor',
     'ckeditor_uploader',
+    
 ]
 
 MIDDLEWARE = [
@@ -73,7 +76,7 @@ TEMPLATES = [
                 # 此处添加新的全局上下文
                 'article.mycontext.getAllArticleType',
                 'user.processoes_context.user_identity',
-                'link.mycontext.getAllLink'
+                # 'link.mycontext.getAllLink'
             ],
         },
     },

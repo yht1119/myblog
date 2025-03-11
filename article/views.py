@@ -56,7 +56,7 @@ def detail(request, id, aId):
         commentList = Comment.objects.filter(article_id=aId).order_by('-create_time')
         return render(request, 'detail.html', locals())
     else:  # 添加评论信息
-        user = request.POST.get("user")
+        user = MyUser.objects.filter(id=id).first()
         content = request.POST.get("content")
         value = {'user': user, 'content': content, 'article_id': aId, 'create_time': datetime.datetime.now(),
                  'author_id': id}
@@ -74,7 +74,8 @@ def search(request, id):
     :return:
     """
     v = request.POST.get("v")
-    articleList = Article.objects.filter(Q(author_id=id, title__contains=v) | Q(author_id=id, content__contains=v))
+    admin_user_id = 2  # 管理员用户的ID为2
+    articleList = Article.objects.filter(Q(author_id=admin_user_id, title__contains=v) | Q(author_id=admin_user_id, content__contains=v))
     paginator = Paginator(articleList, 10)
     pageData = paginator.page(1)
     return render(request, 'result.html', locals())

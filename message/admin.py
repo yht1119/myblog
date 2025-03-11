@@ -17,7 +17,23 @@ class MessageAdmin(admin.ModelAdmin):
         :return:
         """
         qs = super().get_queryset(request)
-        return qs.filter(user_id=request.user.id)
+        return qs.all()
+
+    def get_readonly_fields(self, request, obj=None):
+        # 将所有字段设置为只读
+        return ['content', 'create_time', 'user']
+
+    def has_change_permission(self, request, obj=None):
+        # 禁止修改消息
+        return False
+
+    def has_add_permission(self, request):
+        # 禁止添加新消息
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        # 允许删除消息
+        return True
 
     def add_view(self, request, form_url='', extra_context=None):
         """
