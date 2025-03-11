@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # 此处添加新的全局上下文
                 'article.mycontext.getAllArticleType',
+                'user.processoes_context.user_identity',
                 'link.mycontext.getAllLink'
             ],
         },

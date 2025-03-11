@@ -41,7 +41,7 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(ArticleType)
 class ArticleTypeAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'user']
+    list_display = ['id', 'name']
 
     def get_queryset(self, request):
         """

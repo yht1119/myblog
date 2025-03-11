@@ -62,13 +62,13 @@
                                 <a class="nav-link" href="{% url 'album' id 1 %}">相册</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'about' id %}">关于我</a>
+                                <a class="nav-link" href="{% url 'about' id %}">个人信息</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'message' id 1 %}">留言</a>
                             </li>
-                            {% if user.is_staff %}
-                            <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">后台管理</a></li>
+                            {% if user_identity %}
+                                <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">后台管理</a></li>
                             {% endif %}
                         </ul>
                         <form class="d-flex" role="search" method="post" action="{% url 'search' id %}"

@@ -8,7 +8,7 @@ from message.models import Message
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'email', 'content', 'create_time']
+    list_display = ['content', 'create_time', 'user']
 
     def get_queryset(self, request):
         """

@@ -5,10 +5,19 @@
 <div class="data_list">
     {% for message in pageData.object_list %}
     <div class="msg card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">{{ message.name }} <small class="text-muted">{{ message.create_time|date:"Y-m-d"
-                }}</small></h5>
-            <p class="card-text">{{ message.content }}</p>
+        <div class="card-body d-flex align-items-center">
+            <!-- 显示用户头像 -->
+            {% if message.user.avatar %}
+            <img src="{{ message.user.avatar.url }}" alt="头像" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+            {% else %}
+            <img src="{% static 'images/user.jpg' %}" alt="默认头像" class="rounded-circle me-3" style="width: 50px; height: 50px;">
+            {% endif %}
+            <div class="flex-grow-1">
+                <h5 class="card-title mb-1">{{ message.user.name }}</h5>
+                <p class="card-text mb-0">{{ message.content }}</p>
+            </div>
+            <!-- 将留言时间放在最右边 -->
+            <small class="text-muted ms-auto">{{ message.create_time|date:"Y-m-d H:i" }}</small>
         </div>
     </div>
     {% endfor %}
@@ -38,17 +47,7 @@
     <div class="gbox card p-4">
         <form action="" method="post" onsubmit="return checkForm()">
             {% csrf_token %}
-            <h4 class="mb-3">说点什么吧...</h4>
-
-            <div class="mb-3">
-                <label for="name" class="form-label">您的姓名:</label>
-                <input name="name" type="text" id="name" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label">联系邮箱:</label>
-                <input name="email" type="email" id="email" class="form-control" required>
-            </div>
+            <h4 class="mb-3">你想对我说点什么</h4>
 
             <div class="mb-3">
                 <label for="content" class="form-label">留言内容：</label>
@@ -64,17 +63,9 @@
 {% block script %}
 <script>
     function checkForm() {
-        var name = $("#name").val();
-        var email = $("#email").val();
         var content = $("#content").val();
         if (!content) {
             alert("请输入留言内容！");
-            return false;
-        } else if (!name) {
-            alert("请填写姓名！");
-            return false;
-        } else if (!email) {
-            alert("请填写邮箱！");
             return false;
         }
         return true;

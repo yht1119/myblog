@@ -11,7 +11,6 @@ class ArticleType(models.Model):
     """
     id = models.AutoField(primary_key=True)
     name = models.CharField('类别名称', max_length=50)
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, verbose_name='用户')
 
     def __str__(self):
         return self.name
