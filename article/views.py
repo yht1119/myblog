@@ -2,10 +2,11 @@ import datetime
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import F, Q
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 
 from article.models import Article, Comment
+from favorites.models import Favorite, Like
 from user.models import MyUser
 
 
@@ -49,11 +50,15 @@ def detail(request, id, aId):
     """
     if request.method == 'GET':  # 查询帖子信息
         user = MyUser.objects.filter(id=id).first()
-        article = Article.objects.filter(id=aId).first()
+        article = get_object_or_404(Article, id=aId)
         # 阅读量加1
         Article.objects.filter(id=aId).update(reads=F('reads') + 1)
         # 获取博客评论信息
         commentList = Comment.objects.filter(article_id=aId).order_by('-create_time')
+        # 获取当前用户的收藏
+        is_favorited = Favorite.objects.filter(user=user, article=article).exists()  # 检查是否已收藏
+        # 获取当前用户的点赞
+        is_liked = Like.objects.filter(user=user, article=article).exists()  # 检查是否已点赞
         return render(request, 'detail.html', locals())
     else:  # 添加评论信息
         user = MyUser.objects.filter(id=id).first()

@@ -10,13 +10,39 @@
             <div class="blog_title"><h3><strong>{{ article.title }}</strong></h3></div>
 
             <div class="blog_info">
-                作者：{{ user.name }}&nbsp;&nbsp;发布时间：『 {{ article.create_time|date:'Y-m-d H:i' }}』&nbsp;&nbsp;阅读({{ article.reads }})
+                作者：{{ article.author.name }}&nbsp;&nbsp;发布时间：『 {{ article.create_time|date:'Y-m-d H:i' }}』&nbsp;&nbsp;阅读({{ article.reads }})
             </div>
             <div class="blog_content">
                 {{ article.content |safe }}
             </div>
         </div>
     </div>
+
+    <!-- 收藏和点赞按钮并排放置 -->
+    <div class="text-center mb-3 d-flex justify-content-center">
+        <form action="{% if user.is_authenticated %}{% if is_favorited %}{% url 'remove_from_favorites' article.id %}{% else %}{% url 'add_to_favorites' article.id %}{% endif %}{% else %}{% url 'userLogin' %}{% endif %}" method="post" class="me-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                {% if is_favorited %}
+                    取消收藏
+                {% else %}
+                    收藏
+                {% endif %}
+            </button>
+        </form>
+
+        <form action="{% if user.is_authenticated %}{% if is_liked %}{% url 'remove_like' article.id %}{% else %}{% url 'add_like' article.id %}{% endif %}{% else %}{% url 'userLogin' %}{% endif %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">
+                {% if is_liked %}
+                    取消点赞
+                {% else %}
+                    点赞
+                {% endif %}
+            </button>
+        </form>
+    </div>
+
     <div class="data_list">
         <div class="data_list_title">
             <img src="{% static 'images/comment_icon.png' %}"/>
@@ -73,6 +99,7 @@
             </form>
         </div>
     </div>
+
 {% endblock %}
 {% block script %}
     <script>

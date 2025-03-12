@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}我的收藏{% endblock %}
+
+{% block content %}
+    <div class="data_list">
+        <div class="data_list_title">
+            <img src="{% static 'images/list_icon.png' %}"/>
+            我的收藏
+        </div>
+        <div class="datas">
+            {% if not favorites %}
+                <p style="text-align: center;padding-top: 10px">您还没有收藏任何文章！</p>
+            {% else %}
+                <ul>
+                    {% for favorite in favorites %}
+                        <li style="margin-bottom: 30px">
+                            <span class="date">
+                                <a href="{% url 'detail' id favorite.article.id %}">{{ favorite.article.create_time|date:'Y年m月d日' }}</a>
+                            </span>
+                            <span class="title">
+                                <a href="{% url 'detail' id favorite.article.id %}">{{ favorite.article.title }}</a>
+                            </span>
+                            <span class="summary">{{ favorite.article.abstract }}...</span>
+                            <span class="img">
+                                {% if favorite.article.image %}
+                                    <img src="{{ favorite.article.image.url }}">
+                                {% endif %}
+                            </span>
+                            <span class="info">发表于 {{ favorite.article.create_time|date:'Y-m-d H:i' }} 阅读({{ favorite.article.reads }})</span>
+                        </li>
+                        <hr style="height:5px;border:none;border-top:1px dashed gray;padding-bottom: 10px;">
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

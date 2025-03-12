@@ -41,10 +41,9 @@ INSTALLED_APPS = [
     'album',
     'article',
     'message',
-    # 'link',
+    'favorites',
     'ckeditor',
     'ckeditor_uploader',
-    
 ]
 
 MIDDLEWARE = [
@@ -76,7 +75,7 @@ TEMPLATES = [
                 # 此处添加新的全局上下文
                 'article.mycontext.getAllArticleType',
                 'user.processoes_context.user_identity',
-                # 'link.mycontext.getAllLink'
+
             ],
         },
     },
@@ -151,3 +150,5 @@ CKEDITOR_CONFIGS = {
 }
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 CKEDITOR_BROWSE_SHOW_DIRS = True
+
+LOGOUT_REDIRECT_URL = '/user/login.html'  # 更改注销后跳转的页面

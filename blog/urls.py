@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('album/', include('album.urls')),
     path('message/', include('message.urls')),
+    path('favorites/', include('favorites.urls')),
     path('', include('article.urls')),
     re_path('media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     re_path('static/(?P<path>.*)', serve, {'document_root': settings.STATIC_ROOT}, name='static'),
