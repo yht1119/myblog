@@ -11,7 +11,14 @@
     <script src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <style>
         body {
-            background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+            {% if user.background_image %}
+                background-image: url('{{ user.background_image.url }}');
+            {% else %}
+                background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+            {% endif %}
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -19,8 +26,26 @@
             justify-content: flex-start;
         }
 
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            {% if user.background_image %}
+                background-image: url('{{ user.background_image.url }}');
+            {% else %}
+                background: linear-gradient(135deg, #74EBD5 0%, #9FACE6 100%);
+            {% endif %}
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            z-index: -1;
+        }
+
         .container {
-            background: #fff;
+            background: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -36,6 +61,7 @@
     </style>
 </head>
 <body>
+<div class="background"></div> <!-- 背景层 -->
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -44,6 +70,9 @@
         <div class="col-md-8 d-flex justify-content-end align-items-center">
             <iframe style="float: right;" width="400" scrolling="no" height="60" frameborder="0"
                     allowtransparency="true" src="http://i.tianqi.com/index.php?c=code&id=12&icon=1&num=5"></iframe>
+            <form action="{% url 'upload_background' user.id %}" method="get" style="display:inline; margin-left: 10px;">
+                <button type="submit" class="btn btn-success">上传背景</button>
+            </form>
             <form action="{% url 'logout' %}" method="post" style="display:inline; margin-left: 10px;">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">注销</button>
@@ -52,7 +81,7 @@
     </div>
     <div class="row">
         <div class="col-md-12" style="padding-top: 10px;padding-bottom: 10px">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{% url 'article' id 1 0 %}">博客首页</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -62,15 +91,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'album' id 1 %}">相册</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'about' id %}">个人信息</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'message' id 1 %}">留言</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'album' id 1 %}">相册</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'about' id %}">个人信息</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'message' id 1 %}">留言</a></li>
                             {% if user_identity %}
                                 <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">后台管理</a></li>
                             {% endif %}
@@ -78,9 +101,8 @@
                         <form class="d-flex" role="search" method="post" action="{% url 'search' id %}"
                               onsubmit="return checkSearchForm()">
                             {% csrf_token %}
-                            <input class="form-control me-2" type="search" placeholder="请输入搜索内容..."
-                                   aria-label="Search" name="v" id="v" value="{{ v }}">
-                            <button class="btn btn-primary" type="submit">搜索</button>
+                            <input class="form-control me-2" type="search" placeholder="请输入搜索内容..." name="v" id="v" value="{{ v }}">
+                            <button class="btn btn-outline-success" type="submit">搜索</button>
                         </form>
                     </div>
                 </div>
@@ -99,7 +121,7 @@
 <script>
     function checkSearchForm() {
         var v = $("#v").val();
-        if (v == null || v === '') {
+        if (v === null || v === '') {
             alert("请输入搜索内容！");
             return false;
         }

@@ -12,6 +12,7 @@ class MyUser(AbstractUser):
     wx = models.CharField('微信', max_length=50, default='暂无信息')
     qq = models.CharField('QQ', max_length=50, default='暂无信息')
     avatar = models.ImageField('头像', blank=True, upload_to='avatar/')
+    background_image = models.ImageField('背景图像', blank=True, upload_to='backgrounds/')
 
     # 设置返回值
     def __str__(self):

@@ -96,6 +96,19 @@ def edit_user(request, id):
         return redirect('about', id=user.id)
     return render(request, 'edit_user.html', locals())
 
+def upload_background(request, id):
+    """
+    上传背景图像
+    """
+    user = get_object_or_404(MyUser, id=id)
+    if request.method == 'POST':
+        # 处理背景图像上传
+        if 'background_image' in request.FILES:
+            background_image = request.FILES['background_image']
+            user.background_image.save(background_image.name, background_image, save=True)
+        return redirect('article', id=user.id, page=1, typeId=0)
+    return render(request, 'upload_background.html', locals())
+
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'change_password.html'  # 自定义模板
     success_url = reverse_lazy('password_change_done')  # 修改成功后的重定向 URL
@@ -112,3 +125,4 @@ class CustomPasswordChangeDoneView(PasswordChangeDoneView):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user  # 将当前用户信息传递给模板
         return context
+

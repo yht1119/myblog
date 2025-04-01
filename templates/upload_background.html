@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}上传背景{% endblock %}
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">上传背景</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="background_image" class="form-label">选择背景图像：</label>
+                <input type="file" id="background_image" name="background_image" class="form-control">
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">上传</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

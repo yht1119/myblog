@@ -20,5 +20,7 @@ urlpatterns = [
     path('change_password/', PasswordChangeView.as_view(), name='change_password'),
     path('password_change_done/', CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
     # 注销
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),  
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # 上传背景图像
+    path('upload_background/<int:id>/', upload_background, name='upload_background'),
 ]
